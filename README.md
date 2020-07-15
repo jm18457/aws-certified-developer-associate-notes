@@ -140,6 +140,8 @@ S3
                => With Customer provided keys (SSE-C)
            CSE => 
 
+7. Recheck all things regarding cloudfront as I forgot to save file when editing cloudfront.
+
 ROUTE 53
 
 1. What is DNS?
