@@ -158,7 +158,7 @@
 #### EC2 Spot Instance
 
 - Up to 90% cheaper compared to On-demand.
-- Define max sport price and get the instance while current spot price is smaller than max.
+- Define max spot price and get the instance while current spot price is smaller than max.
 - If current spot price is bigger than max, then you have 2 minute grace period to stop or terminate your instance.
 - Other strategy: Spot Block (What does this mean?)
   - "block" spot instance during a specified time frame (1 to 6 hours) without interruptions
@@ -211,7 +211,7 @@
   - Pre-installed packages needed.
   - Faster boot time (no need for ec2 user data)
   - Machine comes configured with monitoring / enterprise software
-  - Security concers - control over the machines in the network
+  - Security concerns - control over the machines in the network
 - Using public AMIs:
   - Optimized software.
   - Easy to run and configure.
@@ -273,7 +273,6 @@
   - entire ram state is written to a file in root ebc volume
   - root EBS volume must be encrypted
 - long-running processing
-- saving the ram state
 - does not support all instance families
 - ram size must be less than 150gb
 - not suported for bare metal instances
@@ -379,7 +378,7 @@
 - Same client is always redirected to the same instance behind a load balancer.
 - This works for CLB / ALB.
 - Use case: make sure user doesn't lose his session data.
-- Stickiness may bring imabalnce to the load the backend EC2 instances.
+- Stickiness may bring imbalance to the load the backend EC2 instances.
 - Done via cookie with expiration date.
 
 #### Cross-Zone Load Balancing
@@ -542,7 +541,7 @@
 - Uses security group to controll access to EFS.
 - Compatiable with Linux based AMI
 - Encryyption at rest using KMS.
-- EFS SCale: grow to petabyte automatically,
+- EFS Scale: grow to petabyte automatically,
 - Performance mode: general purpose, latency sensitive
 - Performance mode: max i/o
 - Storage Tiers: standard, infrequent access (EFS-IA)
@@ -681,7 +680,7 @@
 ### Overview
 
 - Route53 is Managed DNS
-- Most commont records:
+- Most common records:
   - A: hostname to IPv4
   - AAAA: hostname to IPv6
   - CNAME: hostname to hostname
@@ -748,7 +747,7 @@
 - When launching a full stack (EC2, EBS, RDS) it can take time to:
   - Install applications
   - Insert initial data
-  - configur everyything
+  - configure everyything
   - launch the application
 - Speed up:
   - EC2 Instances:
@@ -781,3 +780,124 @@
   - Environment name (dev, test, prod): free naming
 - You deploy application versions to environments and can promote application versions to the next environment
 - Rollback feature to previous application version
+
+## Serverless
+
+Projects to do:
+
+1. Serverless CRON job
+2. Thumbnail creation
+
+- Servers is new paradigm in which the developers don't have to manage servers anymore.
+- at start serverless === FaaS (function as a service)
+- Serversless now includes anything managed (databases, messaging, storage etc.)
+- Serverless = do not provision, manage servers
+
+### Lambda Overview
+
+- EC2:
+  - Continuously running
+  - Scaling means intervention to add / remove servers
+  - Limited by RAM / CPU
+- Lambda:
+  - Functions, no servers to manages
+  - Limited by time - short executions
+  - Run on-demand
+  - Scaling automated
+- Integrations: api gateway, kinesis, dynamoDb, s3, cloudfront, cloudwatch events eventbridge, cloudwatch logs, sns, sqs, cognito
+
+### Lambda limits - per limits
+
+- Execution:
+  - Memory allocation: 128mb - 3008mb
+  - Maximum execution: 900 seconds
+  - ENV Variables: max 4kb
+  - Concurrency executions: 1000 (can be increased)
+- Deployment
+  - Compressed zim max size 50mb
+  - Uncompressed (code + dependancies) 250mb
+
+### Lambda@edge
+
+- You deploy CDN using cloudfront and want global aws lambda alongside. Use lambda@edge.
+- You can change 4 requests with lambda@edge:
+  - user => cloudfront
+  - cloudfront => origin
+  - origin => cloudfront
+  - cloudfront => user
+- Why to use lambda@edge?
+  - Website security and privacy
+  - dynamic web application at edge
+  - SEO
+  - intelligently route across origins and data centers
+  - bot mitigation at the edge
+  - real time image transformation
+  - ab testing
+  - user auth authorization
+  - user prioritization
+  - user tracking and analytics
+
+### DynamoDB
+
+- Fully Managed high availablty with replacation across 3 az
+- NOSQL
+- massive scalling
+- fast and consistent in performance
+- (Read Capacity Units) RCU:
+  - 1 RCU = 1 strongly consistent read of 4kb per second
+  - 1 RCU = 2 eventually consistent read of 4kb per second
+- (Write Capacity Units) WCU:
+  - 1 WCU = 1 write of 1kb per second
+
+### Advanced DynamoDB
+
+- DynamoDB Streams:
+  - Changes in DB can end up in stream
+  - Lambda can react to stream (react to changes in real time, send email to users etc.)
+- Transactions
+- On Demand (2.5x more expensive than provisioned capacity)
+- Security:
+  - Encryption at rest using KMS
+  - VPC endpoints available to access DynamoDB without internet
+  - Access fully controlled by IAM
+- Backup & Restore available
+- Global tables
+- Amazon DMS to migration to DynamoDB from mongo, oracle, sql, s3 etc.)
+- You can launch local DynamoDB on computer for development.
+
+### API Gateway
+
+- AWS Lambda + API Gateway: no infrastructure to manage
+- Support for websocket protocol
+- Handle API versioning
+- handle different environments (dev, test, prod, ...)
+- Handle security (authentication, authorization)
+- Create API keys, handle request throttling
+- Swagger / Open API import to quickly define APIs
+- Transform and validate requests and responses
+- Cache API responses, generate SDK and API specifications
+- Lambda function (integration):
+  - Invoke lambda function, easy way to expose rest api backed by AWS lambda
+- HTTP (integration):
+  - Expose HTTP endpoints in the backend.
+  - Example: internal HTTP api on premise, application load balancer
+- AWS Service (integration)
+  - Expose any AWS api through API gateway.
+  - Example: post message to SQS
+  - Why: Add authentication, deploy publicly, rate control etc.
+- Endpoint types:
+  - Edge-Optimized (default): For global clients, use CloudFront edge locations, gateway lives in only one region
+  - Regional: For clients in same region
+  - Private: Only be accessed from your VPC using an interface VPC endpoint (ENI), use resource policy to define acccess
+
+### API Gateway - Security
+
+- IAM:
+  - Create an IAM policy authorization and attach to user / role
+  - API gateway verfies IAM permissions passed by the calling application
+  - Good to provide access within your own infrastructure
+  - Leverages "Sig v4" where IAM credential are in headers
+- Lambda authorizer
+  - validate token in header being passed
+  - helps to use OAUTH, SAML, 3rd part auth
+  - Lambda must return IAM policy for the user
