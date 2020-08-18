@@ -814,7 +814,7 @@ Projects to do:
   - ENV Variables: max 4kb
   - Concurrency executions: 1000 (can be increased)
 - Deployment
-  - Compressed zim max size 50mb
+  - Compressed zip max size 50mb
   - Uncompressed (code + dependancies) 250mb
 
 ### Lambda@edge
@@ -893,11 +893,40 @@ Projects to do:
 ### API Gateway - Security
 
 - IAM:
-  - Create an IAM policy authorization and attach to user / role
-  - API gateway verfies IAM permissions passed by the calling application
-  - Good to provide access within your own infrastructure
-  - Leverages "Sig v4" where IAM credential are in headers
+  - Great for users / roles already within your AWS account
+  - Handle authentication + authorization
+  - Leverages Sig v4
 - Lambda authorizer
-  - validate token in header being passed
-  - helps to use OAUTH, SAML, 3rd part auth
-  - Lambda must return IAM policy for the user
+  - Great for 3rd party tokens
+  - Very flexible in terms of what IAM policy is returned
+  - Handle Authentication + Authorization
+  - Pay per lambda invocation
+- Cognito User Pools
+  - You manage your owner user poool (can be backed by Facebok, Google login etc.)
+  - No need to write any custom code
+  - Must implement authorization in the backend
+
+### AWS Cognito
+
+- Cognite User Pools:
+  - Serverless database of user for your app
+  - Simple login: username or email / password
+  - Can enable federated identities (Facebook, Google)
+  - Sends backa a JSON web token
+  - Can be integrated with API gateway for Authentication
+- Cognito Federated Identity Pools:
+  - Provide direct access to AWS resources from client side
+  - Login to FIP, get temporary AWS credentials, these credentials come with pre-defined IAM policy
+  - Example: provice temporary access to write to S3 bucket using facebook login
+- Cognito Sync (deprecated use AWS AppSync now):
+
+  - Store preferences, configuration, state of app
+  - Requires Federated Identity Pool in Cognito
+
+### SAM
+
+- SAM = Serverless Application Model
+- Framework for developing and deploying serverless applications
+- All the configuration is YAML code
+- SAM can help you to run Lambda, API Gateway, DynamoDB locally
+- SAM can use CodeDeploy to deploy Lambda Functions
