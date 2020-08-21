@@ -930,3 +930,51 @@ Projects to do:
 - All the configuration is YAML code
 - SAM can help you to run Lambda, API Gateway, DynamoDB locally
 - SAM can use CodeDeploy to deploy Lambda Functions
+
+## S3
+
+### Buckets
+
+- Must have globally unique name.
+- Store objects (files) in directories (buckets)
+- Buckets are defined at the region level
+- Naming convention:
+  - No uppercase
+  - No underscore
+  - 3-63 characters long
+  - Not an IP
+  -
+
+
+### Objects
+
+- Objects have a key.
+- URL = full path, s3://mybucket/my_folder/filename.txt
+- There is no concept of directories.
+
+### S3 Versioning
+
+- You have to enable it.
+- Same key overwrite will increment the version.
+- Prevents accidental delete as it only deletes a marker.
+- You can manually delete a version of the object.
+
+### S3 Encryption
+
+- 4 Methods of encryption:
+  - SSE-S3: encyprs objects using keys handled & managed by AWS
+    - Object is encrypted server side
+    - header must be set aws:sse
+  - SSE-KMS: leverages AWS key management service to manage encryption keys
+    - Object is encrypted server side
+    - header must be set aws:kms
+    - KMS advantages: user control + audit trail
+  - SSE-C: you manage your own encryption keys
+    - AWS s3 does not store the encryption key you provided
+    - Encryption key must be provided in HTTP header
+    - To retrieve you need to provide same encryption key
+  - Client Side Encryption
+    - Client Library such as Amazon S3 Encryption Client
+    - Clients must encrypt data before sending to S3
+    - Clients must decrypt data themselves when retrieving s3
+    - Customer fully manages the keys and encryption cycle
