@@ -24,3 +24,11 @@
 - IAM Credentials should NEVER BE SHARED
 - NEVER write IAM credentials in code.
 - Never use the ROOT account except for initial setup.
+
+## Policies
+
+- Statement: consists of below, array of them
+  - Effect: Allow or Deny
+  - Action: Array of actions to allow
+  - Resource: ARN or \*
+- IAM Policy Simulator

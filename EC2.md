@@ -251,3 +251,13 @@
   - cluster
   - spread
   - partition (mix of cluster / spread)
+
+## AWS CLI on EC2
+
+- Never put personal credentials and run `aws configure`.
+- Create IAM EC2 role and attach that role to EC2.
+
+## EC2 Instance Metadata
+
+- It allows instances to lean about themselves.
+- URL is: http://169.254.169.254/latest/meta-data
