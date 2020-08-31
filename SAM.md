@@ -66,6 +66,9 @@ Projects to do:
 - (Write Capacity Units) WCU:
   - 1 WCU = 1 write of 1kb per second
 
+## Dax Cluster
+
+
 ## Advanced DynamoDB
 
 - DynamoDB Streams:
