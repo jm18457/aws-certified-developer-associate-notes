@@ -18,3 +18,4 @@
 16. [Storage_Extras](Storage_Extras.md)
 17. [Exam Tips](Exam_Tips.md)
 18. [CloudFront](Cloudfront.md)
+19. [Disaster & Recovery](Disaster_Recovery.md)
