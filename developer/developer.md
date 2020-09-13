@@ -1,3 +1,20 @@
+# Route 53
+
+## Overview
+
+- **Route53:** is Managed DNS
+- **A:** hostname to IPv4
+- **AAAA:** hostname to IPv6
+- **CNAME:** hostname to hostname, only non root
+- **Alias:** hostname to AWS resource, also root
+- **DNS Records TTL:** domain => ip is cached.
+- **Routing Policy - Simple:** Can't attach health checks. If multiple values then randomly chosen by client.
+- **Routing Policy - Weighted:** Example: New deploy receive 1% of requests at the start.
+- **Routing Policy - Latency:** Lowest latency for client.
+- **Routing Policy - Failover:** If primary healthy then primary else secondary resource.
+- **Routing Policy - Geolocation:** Based on user location. If user from UK => select resource closest for UK (we have to specify).
+- **Routing Policy - Multi value:** Improved simple. Has health checks.
+
 # SQS
 
 - **Producer:** Send message.
@@ -69,3 +86,13 @@
 - **HTTPS:** Load certificate to Load balancer (using cli, .env, console)
 - **Custom domain name:** Done using Route53 alias.
 - **Worker Environment:** Meant for tasks that are long to complete. (Decoupling applications)
+
+# CICD
+
+- **CodeCommit:** Managed & hosted git repository by AWS. Security: IAM, SSH key (created in IAM per user). Events (pull request, delete branch etc.) can trigger notifications. Triggers (meant for code change events).
+- **CodePipeline:** List of stages (code, build, test, deploy, provision). State change happen in CloudWatch Events which can in return create SNS notifications.
+- **CodeBuild:** AWS Managed build service (alternative to Jenkins). Build instructions can be set in buildspec.yml file. Can be defined in CodePipeline and CodeBuild.
+- **buildspec.yml:** Must be root directory of your code. Define environment variables. Phases (install, pre build, build, post build). Outputs artifacts. Can use cache for build speedup.
+- **CodeDeploy:**
+- **Artifacts:** Are end results of stages. Each stage outputs artifacts and those artifacts are then input into new stage. Using S3.
+- **CodePipeline:**
