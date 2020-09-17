@@ -15,6 +15,36 @@
 - **Allow / Deny:** Explicit deny > explicit allow > implicit deny.
 - **IAM conditions:** Restrict by ip, region etc.
 
+# EC2
+
+- **EC2 Instance Connect:** Browser based SSH connectin through AWS console.
+- **Security Groups:** They control traffic that is allowed into (inbound) / out (outbound) for EC2 Machines. Can be attached to multiple instances. Outside of EC2 instance. Time Out => security group missconfigured. Connection refused => application error.
+- **IPv4:** 256\*\*4 options. Example: 250.250.250.250
+- **IPv6:** Example: 1900:4545:3:200:f8ff:fe21:67cf
+- **Public IP:** Can be identified from internet. Must be globally unique.
+- **Private IP:** Can be identified from private network. Must be unique within private network. Can connect to web using NAT gateway.
+- **Elastic IP:** Fixed IP in AWS. Up to 5 per account.
+- **EC2 User Data:** Script run with root user at first instance start, used for installing software, updates etc.
+- **On Demand Instances:** Hourly, short workload, highest cost.
+- **Reserved Instances:** Minimum 1 year, cheaper, long workloads.
+- **Scheduled Reserved Instances:** You reserve time window. Example: every friday between 4 - 6.
+- **Spot Instances:** Define max spot price. If spot price is lower you get otherwise you lose it (2 min grace period).
+- **Dedicated Instances:** Only you are using the hardware.
+- **Dedicated Hosts:** Book an entire physical server.
+- **Spot Block:**
+- **Spot Fleets:**
+- **EC2 Instance Types:** R (ram), C (cpu), M (general), I (high I/O), G (gpu), T2 / T3 burstable, T2 / T3 unlimited burst
+- **T2 / T3 bursting:** Unexpected spike => burst => if credits are gone cpu becomes bad.
+- **AMI (Amazon Machine Image):** Create AMI from EC2 instance. Faster boot time. Preinstalled software etc.
+- **Cross Account AMI copy:**
+- **Placement Groups:** Cluster (same hardware, low latency group in single AZ), Spread (across AZ), Partition (combination of cluster and spread).
+- **ENI:** Logical component in a VPC that represend a virtual network card.
+- **Stop:** Data on disk is kept intact.
+- **Terminate:** Root EBS volume is destroyed.
+- **Hibernate:** In-memory (ram) state is preserved.
+- **EC2 CLI and roles:** Never setup CLI on AWS. Create role and attach it to EC2 instance.
+- **EC2 Instance Metadata:** Internal IP address with which instance can access information about themself. http://169.254.169.254/latest/meta-data
+
 ## EBS - Elastic Block Storage
 
 - **EBS (Elastic Block Storage):** is a network drive, persistant storage (except root).
