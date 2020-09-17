@@ -15,7 +15,7 @@
 - **Allow / Deny:** Explicit deny > explicit allow > implicit deny.
 - **IAM conditions:** Restrict by ip, region etc.
 
-# EBS - Elastic Block Storage
+## EBS - Elastic Block Storage
 
 - **EBS (Elastic Block Storage):** is a network drive, persistant storage (except root).
 - **Mount:** Can only be mounted by ONE EC2 instance in same AZ. Not mounted by default, have to mount in ec2 instance. Not mounted after restart, need to fstab.
@@ -30,14 +30,14 @@
 - **Raid 0:** Split data. Peformance. 2x 500gb with 4000 IOPS => 1x 1000gb with 8000 iops.
 - **Raid 1:** Duplicated data. Fault tolerance. 2x 500gb with 4000 IOPS => 1x 500gb with 4000 iops.
 
-# EFS - Elastic File System
+## EFS - Elastic File System
 
 - **EFS:** Managed NFS (Network File System).
 - **Mount:** Can be mounted by MANY EC2 instances across AZ. Not mounted by default, have to mount in ec2 instance. Not mounted after restart, need to fstab.
 - **Use cases:** content management, web serving, data sharing, wordpress
 - **Linux only.**
 
-# S3
+## S3
 
 - **Buckets:** Globally unique name. Store objects (files) in buckets (directories).
 - **Objects:** Files. Max size for single upload 100mb. Multi-part upload.
@@ -152,7 +152,7 @@
 - **Site to Site VPN:** Connect on-premise VPN to AWS though public network.
 - **Direct Connect (DX):** Establish a physical connection between on-premise and AWS through private network.
 
-#### Three Tier Architecture
+## Three Tier Architecture
 
 - Public (ELB), Private (ASG), Data Subnets (RDS).
 - Wordpress example: Public: Multi AZ, Private: AZs and EC2 in them, Data: EFS
@@ -218,3 +218,24 @@
 - **AWS Shield:** DDOS protection. Standard tier free for everyone.
 - **AWS WAF (Web Application Firewall):** Protect against common web exploits. Deployable on ALP, API Gateway, CloudFront.
 - **CloudHSM:**
+
+## CloudWatch Metrics
+
+- **Availability:** For every AWS service.
+- **Metric:** Variable to monitor.
+- **EC2 instance metrics:** Per 5 minute (or 1 minute for additional cost).
+- **Custom Metrics:** PutMetricData API => send custom metrics.
+
+## CloudWatch
+
+- **CloudWatch Dashboards:** Global, graphs from different regions.
+- **Sending Logs:** Logs can be sent using SDK.
+- **EC2 logging:** Need to run CloudWatch agent on EC2
+- **Automatic logging:** Elastic Beanstalk, ECS, AWS Lambda, VPC Flow Logs, API Gateway, CloudTrailer, Route53
+- **Log Group:** Usually representing an application.
+- **Log stream:** Instance within appllication, container etc.
+- **Expiration policies:** never expire, 30 days etc.
+- **Alarms:** Trigger notifications for any metric.
+- **ClodWatch Events:** Schedules (cron jobs) or event pattern (ex. codepipeline state changes).
+- **AWS CloudTrail:** History of all events / API calls made within your AWS account.
+- **Config:** Record configuration changes such as security groups, load balance changes etc.
