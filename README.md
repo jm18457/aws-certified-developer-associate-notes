@@ -15,6 +15,28 @@
 - **Allow / Deny:** Explicit deny > explicit allow > implicit deny.
 - **IAM conditions:** Restrict by ip, region etc.
 
+# EBS - Elastic Block Storage
+
+- **EBS (Elastic Block Storage):** is a network drive, persistant storage (except root).
+- **Mount:** Can only be mounted by ONE EC2 instance in same AZ. Not mounted by default, have to mount in ec2 instance. Not mounted after restart, need to fstab.
+- **GP2 (SSD):** general purpose price / performance
+- **IOI (SSD):** Highest performance for mission critical low latency or high throughput. Databases.
+- **STI (HDD):** Low cost for frequently accessed data. Warehouse.
+- **SCI (HDD):** Low cost infrequently access data.
+- **Snapshots:** Only backup changed blocks. Not while APP running.
+- **AZ / Region Migration:** Snapshot the volume, copy volume, create volume from snapshot.
+- **How to encrypt unencrypted:** Snapshot, copy, create.
+- **Instance Store (ephemeral):** Physically attached to the machine. Lost on stop. Good for cache.
+- **Raid 0:** Split data. Peformance. 2x 500gb with 4000 IOPS => 1x 1000gb with 8000 iops.
+- **Raid 1:** Duplicated data. Fault tolerance. 2x 500gb with 4000 IOPS => 1x 500gb with 4000 iops.
+
+# EFS - Elastic File System
+
+- **EFS:** Managed NFS (Network File System).
+- **Mount:** Can be mounted by MANY EC2 instances across AZ. Not mounted by default, have to mount in ec2 instance. Not mounted after restart, need to fstab.
+- **Use cases:** content management, web serving, data sharing, wordpress
+- **Linux only.**
+
 # S3
 
 - **Buckets:** Globally unique name. Store objects (files) in buckets (directories).
@@ -87,6 +109,16 @@
 - **Routing Policy - Failover:** If primary healthy then primary else secondary resource.
 - **Routing Policy - Geolocation:** Based on user location. If user from UK => select resource closest for UK (we have to specify).
 - **Routing Policy - Multi value:** Improved simple. Has health checks.
+
+# AWS Cloudfront
+
+- **AWS CloudFront:** CDN (Content Delivery Network)
+- **Origins:** S3 Bucket, custom origin (http) ec2, alb, s3 website etc.
+- **Usage:** Caching to improve speed reads.
+- **Geo Restriction:** Whitelist, Blacklist.
+- **Signed URLs:** URL expiration, users can reach contain with singede url. Has IP range access. Individual files.
+- **Signed Cookie:** Same as URL, but for all files.
+- **AWS Global Accelerator:** User => AWS Global Acelerator => Edge location => Server through internal network. Otherwise it is passed through external network.
 
 ## SQS
 
