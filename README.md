@@ -188,6 +188,10 @@
 
 - **PUB / SUB pattern:** As many subscriptions as you want (10_000_000).
 
+## Kinesis
+
+**MISSING SECTION, CHECK AGAIN!!!!**
+
 ## Amazon MQ
 
 - **Overview:** When migrating to the cloud instead of re-enginnering the application to use SQS and SNS use Amazon MQ.
@@ -292,3 +296,15 @@
 - **ClodWatch Events:** Schedules (cron jobs) or event pattern (ex. codepipeline state changes).
 - **AWS CloudTrail:** History of all events / API calls made within your AWS account.
 - **Config:** Record configuration changes such as security groups, load balance changes etc.
+
+## CloudFormation
+
+## Lambda
+
+## API Gateway
+
+## DynamoDB
+
+## SAM - Serverless Application Model
+
+## Cognito
