@@ -45,6 +45,29 @@
 - **EC2 CLI and roles:** Never setup CLI on AWS. Create role and attach it to EC2 instance.
 - **EC2 Instance Metadata:** Internal IP address with which instance can access information about themself. http://169.254.169.254/latest/meta-data
 
+## Load Balancers
+
+- **TCP:**
+- **Scalability** - application can handle greater loads by adapting. Vertical (increase resources), horizontal (increase number of instances).
+- **Availability:** Survive disasters.
+- **Load balancing:** Balances traffic to underlying instances.
+- **ELB:** AWS Managed Load Balancer.
+- **Health Checks:** Create endpoint and set interval. If health check fails then load balancer will stop routing to that instance.
+- **Classic Load Balancer:** Old, fixed hostname XX.region.elb.aws.com. TCP, HTTPS, HTTP. Need to enable AZ balancing.
+- **Application Load Balancer:** Context aware. It examines content of HTTP request before sending it to instance.Has AZ balancing (can't disable).
+- **Network Load Balancer:** Context unaware. Layer 4. It just forwards the request without checking it first. Need to enable AZ balancing.
+- **Stickiness:** Same client is sent to same EC2 instance behind load balancer. Causes imbalance of calls. For user login sessions.
+- **SNI:** Loading multiple SSL certificates onto one web server.
+- **Connection Draining:** Time to complete in-flight requests while the instance is de-registring or unhealthy. Stops sending new requests.
+
+## Auto Scaling Group
+
+- **Target Tracking Scaling:** Most simple and easy to set-up. Example: I want the average ASG CPU to stay at around 40%
+- **Launch configuration:** set ami, min max, load balancers etc.
+- **Simple / Step scaling:** Based on CloudWatch alarm.
+- **Scheduled Actions:** Time based. Example: Every friday increase amount of instances.
+- **Scaling cooldown:** ASG doesn't launch or terminate additional instances before previous scaling takes effect.
+
 ## EBS - Elastic Block Storage
 
 - **EBS (Elastic Block Storage):** is a network drive, persistant storage (except root).
