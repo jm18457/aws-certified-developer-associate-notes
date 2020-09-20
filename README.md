@@ -299,7 +299,61 @@
 
 ## CloudFormation
 
+- **Infrastructure as code:** Code controls infrastructure.
+- **Upload:** To S3 bucket. Cannot edit existing template. Need to upload new version.
+- **Deletion:** It deletes all CloudFormation created resources.
+- **Resources:** AWS Resources declared in the template.
+- **Parameters:** Dynamic inputs for your template.
+- **Mappings:** Static / Fixed variables for your template. Usage !FindInMap with provided references.
+- **Outputs:** References to what has been created. You can import exported outputs in other CloudFormation templates.
+- **Import Outputs:** !ImportValue. Can't delete CloudFormation stack which exports output that is referenced by another template.
+- **Conditionals:** List of conditions to perform resource creation. Common: if prod environment then create else not.
+- **Metadata:**
+- **Helpers:** References and functions.
+- **Cross Stack Reference:** CloudFormation template imported exported output from another CloudFormation template.
+- **Intrisic Functions:** !Ref (Resources, parameters), !GetAtt (resource attributes), !FindInMap (find in mapping), !ImportValue (import exported outputs), !Join (join values with a delimiter), !Sub (substitute variable in a text), !If, !Not, !Equals
+- **Rollbacks (Creation):** If fail all stack creation is deleted.
+- **Rollbacks (Update):** If fail all is automatically rollback to previous state.
+- **ChangeSet:** Shows all the changes that will happen.
+
+## YAML
+
+- **Key:Value pair**
+- **-:** Indicates array item.
+- **|:** Indicates multi line string.
+- **#:** Indicates comment line.
+
 ## Lambda
+
+- **Serverless:** Developers don't have to manage servers.
+- **Lambda:** On-demand, short executions, virtual functions. Automated scaling.
+- **Synchronous Invocation:** Result is returned right away. (CLI, SDK, API Gateway, ALB)
+- **Application Load Balancer:** Target groups: Multi-Header values. (supported by ALB setting)
+- **Lambda@Edge:** Deploy Lambda functions alongside your CloudFront CDN. TO DO!
+- **Asynchronous invocations:** Caused by S3, SNS, CloudWatch Events... If something goes wrong lambda retries (we need to stop error). Ded Letter queue for failed errors. We can setup this in lambda console.
+- **CloudWatch Events / EventBridge:** Executed by either CloudWatch Events (cron jobs) or EventBridge (example CodePipeline changes)
+- **S3 Event Notifications:** S3 Event setting under properties/events.
+- **Event Source Mapping:** SQS, DynamoDB streams, Kinesis streams. Synchronously. Polling. Batch sizes. TO DO!
+- **Destinations:** For asynchornous invocations and event source mapping you can set destinations for success and failure results.
+- **Monitoring:** Logs are stored in CloudWatch logs. AWS Lambda requires execution role with permissions to write CloudWatch logs. Metrics for durations, invocations etc. in CloudWatch metrics.
+- **X-Ray tracing:** TO DO!
+- **VPC:** By default launched in AWS VPC. If in your own VPC you need to setup NAT Gateway for access to internet.
+- **Performance:** Timeout: default 3seconds - max 15 minutes. Increasing RAM increases CPU units.
+- **Execution context:** Temporary runtime environment. External dependancies, connections (http, db). Maintained for some time in anticipation of another lambda invocation. "keep warm". Includes '/tmp' directory. Next invocation is faster. Define connections outside handler.
+- **Temporary space:** /tmp directory max size 512mb.
+- **Concurrency:** Up to 1000 concurrent. Reserved concurrency set max value to throttle. Higher limit open support ticket.
+- **Error Concurrency ASYNC Invocation:** Throttled due to max concurrency. Async event goes back and will retry for 6 hours.
+- **Cold Start:** New instance => code is loaded and code outside handler ran (init). High latency.
+- **Provisioned Concurrency:** Concurrency is located before the function is invoked. Cold start never happens. TO DO
+- **External Dependancies:** You need to install and zip dependacies together.
+- **CloudFormation:** Inline (no dependancies, very small function) or using S3 zip. Need to provide S3 zip location, with versioning etc.
+- **Layers:** Externalize dependancies into layers. TO DO. How to create layers.
+- **Versions:** \$LATEST is mutable. Versions are immutable. They get their special ARN.
+- **Aliases:** Pointers to Lambda function versions. Mutable. Enable blue / green deployments.
+- **CodeDeploy:** It builds on versions and alises. Linear, Canary. Automate deploy from v1 to v2 etc.
+- **Limits:** Memory allocation (128mb - 3008mb). Maximum execution: 900 seconds. Environment variables: 4kb. Concurrency: 1000. Deployment sized compressed 50mb (250mb uncompressed).
+- **Best Practices:** Perform heavy duty work outside of your handler (database connections, initializations etc.). Use env variables (and encrypt them if secret). Minimize your deployment package by code splitting , layers etc. NEVER have a lambda function call itself recursevily.
+- **Exercises:** Thumbnail generator S3 event. DynamoDB stream reader.
 
 ## API Gateway
 
