@@ -357,8 +357,44 @@
 
 ## API Gateway
 
-## DynamoDB
+- **Overview:** For exposing lambda functions to the world.
+- **Basic features:** API versioning, different environments, security, request throttling, API keys, Swagger / Open API, transform / validate response and requests, caching, generate SDK and API specifications
+- **Endpoint Types:** Edge-Optimized (default, for global clients, through cloudfront edge locations), Regional, Private.
+- **Stages:** Changes are deployed to stages. They have their own stage variables.
+- **Stage variables:** Different variables per stage. Often used to integrade stage with certain lambda alias.
+- **Deployment:** TO DO
+- **Canary deployments:** % of deployments go to canary (new version)
+- **Integration Types:** Mock, HTTP / AWS (lambda, aws services) with mapping templates (example SQS)
+- **Lambda proxy:** Function is responsible for request / response. There is no modification of request / response in API gateway.
+- **HTTP Proxy:** Same as lambda proxy, but for HTTP.
+- **Integration Mappings:** Example. Client => API gateway => soap api => gateway => return json response. To modify response, add headers etc. Can also rename query string parameters etc.
+- **Swagger & Open API:** Can import from file or can export existing api as file.
+- **Caching:** Per stage, 5min - 1hour. Cache is expensive. Can flush the entire cache. Clients can invalidate cache with header cache control max age 0. Need to disable cache invalidation for any client as that could be abused disaster.
+- **Usage plans:** Who can access API stages and methods. How much, how fast they can access them. Uses API keys to identify clients. Configure throttling limits.
+- **API Keys:** Order: create APIs, generate API keys, create usage plans, associate API stages and API keys with usage plan.
+- **Logging:** Enable at stage level. Logs information about request / response body.
+- **Tracing:** Enable X-Ray tracing for extra information.
+- **What is X-Ray used for?:** TO DO
+- **Metrics:** By stage. CacheHitCount, CacheHitMiss, IntegrationLatency, Latency, 4XX or 5XX errors.
+- **CORS:** Must be enabled for different domain. Generic CORS ....
+- **Authentication:** Using IAM and IAM Policy. Resource policies. Cognito user pools. Lambda authorizer (Token-Based authorizer). TO DO
+- **Lambda Authorizer:** Validates the request by checking sig v4 and checking etc. TO DO
+- **Exercises:** Create API Gateway from Swagger API import. Implement caching on medium website remove javascript. Implement 4XX error metric and alarm.
 
 ## SAM - Serverless Application Model
 
+## DynamoDB
+
 ## Cognito
+
+- **Exercise:** Add Cognito to application (with google login).
+
+## SES
+
+- **Send:** Using AWS SDK or SMTP Interface.
+- **Receive:** Integrates with. S3, SNS, Lambda.
+
+## ACM (AWS Certificate Manager)
+
+- **Integrations:** Loads into Load Balancers, CloudFront, APIs on API Gateway.
+- **Overview:** AWS Managed certificate.
