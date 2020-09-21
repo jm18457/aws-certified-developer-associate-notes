@@ -385,6 +385,31 @@
 
 ## DynamoDB
 
+- **Overview:** AWS Managed NoSQL database. High availability (3 az) and scaling. Auto scaling etc. Made of tables. Each table has primary key.
+- **Primary keys:** Partition key (unique), Partition key + sort key (combination unique).
+- **Throughput:** Need provisioned WCU and RCU. Can be auto scaled if enabled. Burst credits.
+- **WCU:** Write Capacity Units. throughput for writes. One WCU per per second per 1kb of item.
+- **RCU:** Read Capacity Units. throughput for reads One RCU per second per 4 kb (2kb if strongly consistent).
+- **Consistency:** By default it is eventually consistent, but certain APIs allow strong consistency option.
+- **Hot Partition / Hot Key:** RCU / WCU is spread across partitions. We can get exception when only one partition is overloaded.
+- **Partions:** TOTAL RCU / 3000 + TOTAL WCU / 1000 equls amount of partions. Hashing algorithm. Event partioning.
+- **Basic APIs:** PutItem, UpdateItem, DeleteItem, DeleteTable, BatchWriteItem (part of batch can fail), GetItem, BatchGetItem, Query (partiotion key, sort key, filterexpression), scan (use pagination to keep on reading)
+- **Indexes:** LSI (Local Secondary Index) for attributes etc. up to 5. GSI (Global Secondary Index) partition key + optional sort, is new table.
+- **Optimistic Concurrency:** Conditional Delete / Update. Ensure that item hasn't changed before deleting it. Two requests with name change. Only one will go through.
+- **DAX:** DynamoDB Accelarotor. Seamless cache for db. Writes go through DAX, very low latency increase. AWS Managed service, no managemented needed. Only enable.
+- **Streams:** Changes can end up in DynamoDB. Can be read by EC2 or Lambda. You can send keys only, new, used or both. It is not retroactive. For lambda you need to define Event Source Mapping.
+- **TTL:** Delete item after an expiry date. No extra charge. Deleted up to 48 after expiration etc. generic ttl index.
+- **CLI:** Basic commands: --projection-expression, --filter-expression, --page-size, --max-items, --starting-token
+- **Transactions:** Standard SQL transaction, multiple create / update /delete with all or nothing approach. Consumes 2x wcu/rcu.
+- **Session State:** Can be used for session state cache (similar to s3, ebs, efs, elasticache). Basically mongodb similar key / value.
+- **Partioning Strategies:** If partition key is not unique enough we should add random suffix to it. Instead of 2 partitions we get 20 for example. It scales.
+- **Concurrent writes:** Second write overwrited first write if same time.
+- **Conditional writes:** Add condition only if value is equal. Then second write will not occur.
+- **Atomic writes:** One user increase by 1, the other by 2. In the end by 3.
+- **S3 Patterns:** Large Object Pattern. Large data inserted into s3, then metadata returned to db. Client retrieves metadata to get s3. Indexing S3 Object metadata, s3 => lambda => dynamodb.
+- **Operations:** Table Cleanup: Drop + Recreate Table. Copying: AWS DataPipeline, Backup & Restore or Scan + Write.
+- **Security:** DMS to migrate to different db. Can launch local DyanmoDB. Global Tables. Security: VPC, KMS, TLS, IAM.
+
 ## Cognito
 
 - **Exercise:** Add Cognito to application (with google login).
@@ -398,3 +423,7 @@
 
 - **Integrations:** Loads into Load Balancers, CloudFront, APIs on API Gateway.
 - **Overview:** AWS Managed certificate.
+
+## Step Functions
+
+## AppSync
