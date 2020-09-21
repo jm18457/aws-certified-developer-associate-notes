@@ -426,4 +426,9 @@
 
 ## Step Functions
 
+- **Overview:** Serverless visual workflow to orchastrate lambda functions. Represent flow as JSON state machines. Sequence, parallel, error handling etc. Order fulfillment, data processing, web applications. Similar to JOBS.
+
 ## AppSync
+
+- **Overview:** AWS Managed service that uses graphql. It starts with uploading graphql schema. Applications talk directly to AppSync. AppSync graphql schema resolvers to databases, lambdas, https etc.
+- **Security:** API_Key, user pools, openid connect, iam
