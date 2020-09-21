@@ -412,6 +412,10 @@
 
 ## Cognito
 
+- **Overview:**
+- **User Pools:**
+- **Identity Pools:**
+- **Sync:**
 - **Exercise:** Add Cognito to application (with google login).
 
 ## SES
