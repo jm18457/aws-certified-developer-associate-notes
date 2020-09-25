@@ -10,10 +10,16 @@
 - **STS (Security Token Service):** Grant limited and temporary access to AWS resources. AssumeRole API.
 - **Identity Federation:** Allow users outside of AWS to assume temporary role for accessing AWS resources.
 - **Organizations:** Group and manage multiple AWS accounts.
+- **Organization trails:**
 - **RAM:**
 - **IAM Permission Boundaries:** Max boundaries that user can get.
 - **Allow / Deny:** Explicit deny > explicit allow > implicit deny.
 - **IAM conditions:** Restrict by ip, region etc.
+- **Access Advisor:** Analyze unused roles.
+- **AWS Trusted Advisor:** Real-time guidance for best practices, cost and performance optimizations etc.
+- **Access Analyzer:** Identify resources in your organization and accounts that are shared with external entity.
+- **Amazon Inspector:** Security and compliance. Vulnerabilies, exposures etc.
+- **Trust Policy:** Define which principals can assume role.
 
 # EC2
 
@@ -57,8 +63,13 @@
 - **Application Load Balancer:** Context aware. It examines content of HTTP request before sending it to instance.Has AZ balancing (can't disable).
 - **Network Load Balancer:** Context unaware. Layer 4. It just forwards the request without checking it first. Need to enable AZ balancing.
 - **Stickiness:** Same client is sent to same EC2 instance behind load balancer. Causes imbalance of calls. For user login sessions.
+- **Different capacity instance types:** ELB might route more traffic to instances with higher capacity as to not overload lower capacity instances by equal distribution.
 - **SNI:** Loading multiple SSL certificates onto one web server.
+- **Cross Zone Load Balancing:** When enabled the load balancer will distribute traffic across AZ, otherwise it is going to distribute only to instances in same AZ as Load balancer.
 - **Connection Draining:** Time to complete in-flight requests while the instance is de-registring or unhealthy. Stops sending new requests.
+- **Connection:** Load balancers use private address to route traffic to instances. They do not talk to instances through public IP.
+- **ALB Request tracing:** Track HTTP requests from clients to targets. When load balancer retrieves request it adds or updates header with trace id.
+- **ALB Access logs:**  Detailed information about client request. time, ip address, latencies, paths etc. Optional feature. Stored in s3 bucket.
 
 ## Auto Scaling Group
 
@@ -67,6 +78,9 @@
 - **Simple / Step scaling:** Based on CloudWatch alarm.
 - **Scheduled Actions:** Time based. Example: Every friday increase amount of instances.
 - **Scaling cooldown:** ASG doesn't launch or terminate additional instances before previous scaling takes effect.
+- **General:** By default Auto Scaling works only for Ec2 instances. For EB you must change auto scaling group from EC2 to EB.
+- **SSL Pass-through:** SSL layer is not decrypted at load balancer but passed along to server.
+- **SSL Termination:** Reduces strain on server by offloading decryption.
 
 ## EBS - Elastic Block Storage
 
@@ -78,6 +92,7 @@
 - **SCI (HDD):** Low cost infrequently access data.
 - **Snapshots:** Only backup changed blocks. Not while APP running.
 - **AZ / Region Migration:** Snapshot the volume, copy volume, create volume from snapshot.
+- **Encryption:** Supports in-flight and at-rest encryption.
 - **How to encrypt unencrypted:** Snapshot, copy, create.
 - **Instance Store (ephemeral):** Physically attached to the machine. Lost on stop. Good for cache.
 - **Raid 0:** Split data. Peformance. 2x 500gb with 4000 IOPS => 1x 1000gb with 8000 iops.
@@ -110,11 +125,17 @@
 - **S3 IA (Infrequent Access):**
 - **S3 One Zone IA:**
 - **S3 Intelligent Tiering:**
+- **CloudWatch logs:** You can export cloudwatch logs to s3 bucket.
 - **Glacier 3:** retrieval options: expedited, standard, bulk, minimum storage days: 90
 - **Glacier Deep Archive:** 2 retrieval options: standard, bulk, minimum storage days: 180
 - **Lifecycle Policies:** Transition actions (s3 => glacier), Expiration actions (delete old versions after time)
-- **Notifications:** Actions trigger events (example putObject).
+- **Notifications:** Actions trigger events (example putObject). Notifications can occur only once if 2 actions happen same time. If you want consistency use versioning.
 - **Athena:** AWS Managed service to perform analyics directly against s3 files. Used for access logs.
+
+## CloudFront
+
+- **Overview:** TODO!
+- **HTTPS in CloudFormation:** HTTPS is avaialble between client and cloudformation and cloudformation and backend.
 
 ## AWS RDS
 
@@ -175,6 +196,7 @@
 
 ## SQS
 
+- **Max size message:** 1b - 256kb
 - **Producer:** Send message.
 - **Consumer:** Receive message.
 - **Messages:** Persisted until deleted or timeout.
@@ -187,6 +209,14 @@
 ## SNS
 
 - **PUB / SUB pattern:** As many subscriptions as you want (10_000_000).
+
+## SWF (Simple Workflow Service)
+
+- **Overview:** Build applications that coordinate work across distributed components.
+
+## Glue
+
+- **Overview:** TODO
 
 ## Kinesis
 
@@ -222,12 +252,14 @@
 - **Task Definitions:** Metadata in JSON form on how to run a Docker Container. ENV variables, network information, image name, port binding, memory and cpu.
 - **ECS Service:** Define how many tasks should be run and how they should be run. Can be linked to ELB.
 - **ECR:** Private docker image repository. Access is controlled through IAM.
+- **ECS Container Agent:** TODO, check ecs.config. Proably related to non-fargate.
 - **Fargate:** AWS Managed EC2 instances. You still create Tasks, Services, Load balancers, Auto scaling etc.
 - **ECS Instance Profile:** ECS Service, ECR Service, Cloudwatch permissions
 - **ECS Task Role:** Allow task to talk to other AWS services (like s3 bucket).
 - **ECS Task placement:** Binpack, Random, Spread,
 - **Service Auto Scaling:** Target (cloudwatch metric), Step (based on cloudwatch alarms), Schedule
 - **Cluster Capacity Provider:** Cluster auto scaling.
+- **General:** Terminating container instance while in stopped state does not deregister it.
 
 ## Elastic Beanstalk
 
@@ -258,11 +290,19 @@
 - **CodeBuild:** AWS Managed build service (alternative to Jenkins). Build instructions can be set in buildspec.yml file. Can be defined in CodePipeline and CodeBuild.
 - **buildspec.yml:** Must be root directory of your code. Define environment variables. Phases (install, pre build, build, post build). Outputs artifacts. Can use cache for build speedup.
 - **CodeBuild VPC:** By default not in same VPC. You need to specify VPC config. Example: integration testing on database.
+- **CodeBuild output encryption:** Can use KMS to encrypt output artifacts.
 - **CodeDeploy:** EC2 polling CodeDeploy. CodeDeploy sends appspec.yml. Application is pulled from S3 or github. EC2 run deployment instructions.
+- **CodeDeploy deployment groups:** Contains settings and configuration used during the deployment. For Ec2 is contains a list of Ec2 instances.
+- **Deployment options (Ec2):** In-place (all existing instances stopped, then new deployed), blue/green
+- **CodeDeploy rollback:** Redeploy previously deployed version of the application as new deployment. Rollback first tries to remove all files initiated by deployment on failed instances.
+- **Blue / Green ECS:** From old task to updated task in same service. Can specify either canary or linear shift.
+- **Blue / Green EC2:** Using ELB, new instances are registered old deregistered.
+- **Blue / Green Lambda:** Versions, all are blue green.
 - **appspec.yml:** File section, hooks.
 - **CodeDeploy Agent:** Needs to be run on EC2 machines.
 - **Artifacts:** Are end results of stages. Each stage outputs artifacts and those artifacts are then input into new stage. Using S3.
 - **CodeStart:** Integrated solution that groups all above (codecommit, cicd etc.)
+- **CodeBuild error:** You can run codebuild locally to debug errors.
 
 ## Security & Encryption
 
@@ -271,7 +311,7 @@
 - **CSE:** Data is encrypted by the client and decrypted by the client. Server cannot decrypt data.
 - **Parameter Store:** Secure storage for configuration and secrets. Integrates with KMS.
 - **Secrets Manager:** For storing rotating secrets.
-- **KMS:** AWS Managed Keys. Symmetric (single encryption key, most common), Asymmetric (public, private key, use outside of AWS).
+- **KMS:** AWS Managed Keys. Symmetric (single encryption key, most common), Asymmetric (public, private key, use outside of AWS). Max size 4kb. Higher use envelope encryption.
 - **AWS Shield:** DDOS protection. Standard tier free for everyone.
 - **AWS WAF (Web Application Firewall):** Protect against common web exploits. Deployable on ALP, API Gateway, CloudFront.
 - **CloudHSM:**
@@ -336,12 +376,13 @@
 - **Event Source Mapping:** SQS, DynamoDB streams, Kinesis streams. Synchronously. Polling. Batch sizes. TO DO!
 - **Destinations:** For asynchornous invocations and event source mapping you can set destinations for success and failure results.
 - **Monitoring:** Logs are stored in CloudWatch logs. AWS Lambda requires execution role with permissions to write CloudWatch logs. Metrics for durations, invocations etc. in CloudWatch metrics.
-- **X-Ray tracing:** TO DO!
 - **VPC:** By default launched in AWS VPC. If in your own VPC you need to setup NAT Gateway for access to internet.
 - **Performance:** Timeout: default 3seconds - max 15 minutes. Increasing RAM increases CPU units.
 - **Execution context:** Temporary runtime environment. External dependancies, connections (http, db). Maintained for some time in anticipation of another lambda invocation. "keep warm". Includes '/tmp' directory. Next invocation is faster. Define connections outside handler.
 - **Temporary space:** /tmp directory max size 512mb.
-- **Concurrency:** Up to 1000 concurrent. Reserved concurrency set max value to throttle. Higher limit open support ticket.
+- **Concurrency:** Up to 1000 concurrent. Higher limit open support ticket.
+- **Reserved concurrency:** Limits the maximum concurrency of the function including all aliases and versions.
+- **Provisioned concurrency:** You allocate concurrency before increase in invocations. This reduces latency as there is no initializations.
 - **Error Concurrency ASYNC Invocation:** Throttled due to max concurrency. Async event goes back and will retry for 6 hours.
 - **Cold Start:** New instance => code is loaded and code outside handler ran (init). High latency.
 - **Provisioned Concurrency:** Concurrency is located before the function is invoked. Cold start never happens. TO DO
@@ -353,7 +394,11 @@
 - **CodeDeploy:** It builds on versions and alises. Linear, Canary. Automate deploy from v1 to v2 etc.
 - **Limits:** Memory allocation (128mb - 3008mb). Maximum execution: 900 seconds. Environment variables: 4kb. Concurrency: 1000. Deployment sized compressed 50mb (250mb uncompressed).
 - **Best Practices:** Perform heavy duty work outside of your handler (database connections, initializations etc.). Use env variables (and encrypt them if secret). Minimize your deployment package by code splitting , layers etc. NEVER have a lambda function call itself recursevily.
-- **Exercises:** Thumbnail generator S3 event. DynamoDB stream reader.
+- **Cross Account:** Create execution role for lambda and update lambda code to call AssumeRole Api.
+
+## X-Ray
+
+- **Overview:**
 
 ## API Gateway
 
@@ -379,7 +424,6 @@
 - **CORS:** Must be enabled for different domain. Generic CORS ....
 - **Authentication:** Using IAM and IAM Policy. Resource policies. Cognito user pools. Lambda authorizer (Token-Based authorizer). TO DO
 - **Lambda Authorizer:** Validates the request by checking sig v4 and checking etc. TO DO
-- **Exercises:** Create API Gateway from Swagger API import. Implement caching on medium website remove javascript. Implement 4XX error metric and alarm.
 
 ## SAM - Serverless Application Model
 
@@ -388,8 +432,8 @@
 - **Overview:** AWS Managed NoSQL database. High availability (3 az) and scaling. Auto scaling etc. Made of tables. Each table has primary key.
 - **Primary keys:** Partition key (unique), Partition key + sort key (combination unique).
 - **Throughput:** Need provisioned WCU and RCU. Can be auto scaled if enabled. Burst credits.
-- **WCU:** Write Capacity Units. throughput for writes. One WCU per per second per 1kb of item.
-- **RCU:** Read Capacity Units. throughput for reads One RCU per second per 4 kb (2kb if strongly consistent).
+- **WCU:** Write Capacity Units. throughput for writes. One WCU per per second per 1kb of item. Rounds to 1kb increment.
+- **RCU:** Read Capacity Units. throughput for reads One RCU per second per 4 kb (2kb if strongly consistent). Rounds to 4kb increment.
 - **Consistency:** By default it is eventually consistent, but certain APIs allow strong consistency option.
 - **Hot Partition / Hot Key:** RCU / WCU is spread across partitions. We can get exception when only one partition is overloaded.
 - **Partions:** TOTAL RCU / 3000 + TOTAL WCU / 1000 equls amount of partions. Hashing algorithm. Event partioning.
@@ -413,10 +457,11 @@
 ## Cognito
 
 - **Overview:**
-- **User Pools:**
-- **Identity Pools:**
-- **Sync:**
-- **Exercise:** Add Cognito to application (with google login).
+- **User Pools:** Sign in functionality for users. Integrated with API gateway and ALB. Serverless database of user for app. Containes hosted zone.
+- **Lambda triggers:** Authentication, signup, token creation, message. this are synchronous.
+- **Identity Pools (federated identity):** Provide AWS credentials to users so they can access AWS resources directly. Integrates with user pools. Uses STS.
+- **Sync:** Synhcronize data from device to cognito. Replaced by AppSync.
+- **Exercise:** Add Cognito to application (with google login). Add Identity pools application.
 
 ## SES
 
