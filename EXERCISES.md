@@ -2,7 +2,8 @@
 
 List of projects to do to improve knowledge of AWS.
 
-- [ ] Deploy Next.js with incremental static generation on ECS with EFS (optional EB).
+- [x] Deploy Next.js with incremental static generation on ECS with EFS (optional EB).
+- [ ] EC2 Auto Scaling based on different scaling policies (default, alarm, custom metric)
 - [ ] Thumbnail generator after S3 upload.
 - [ ] DynamoDB stream reader.
 - [ ] Create API Gateway from Swagger API import.

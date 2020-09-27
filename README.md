@@ -3,10 +3,7 @@
 ## IAM
 
 - **IAM:** Identity and Access Management. Global Service.
-- **User:**
-- **Group:**
 - **Policy:** Effect (allow or deny), Action (array of actions to effect), Resource (arn).
-- **Role:**
 - **STS (Security Token Service):** Grant limited and temporary access to AWS resources. AssumeRole API.
 - **Identity Federation:** Allow users outside of AWS to assume temporary role for accessing AWS resources.
 - **Organizations:** Group and manage multiple AWS accounts.
@@ -69,7 +66,7 @@
 - **Connection Draining:** Time to complete in-flight requests while the instance is de-registring or unhealthy. Stops sending new requests.
 - **Connection:** Load balancers use private address to route traffic to instances. They do not talk to instances through public IP.
 - **ALB Request tracing:** Track HTTP requests from clients to targets. When load balancer retrieves request it adds or updates header with trace id.
-- **ALB Access logs:**  Detailed information about client request. time, ip address, latencies, paths etc. Optional feature. Stored in s3 bucket.
+- **ALB Access logs:** Detailed information about client request. time, ip address, latencies, paths etc. Optional feature. Stored in s3 bucket.
 
 ## Auto Scaling Group
 
@@ -131,11 +128,6 @@
 - **Lifecycle Policies:** Transition actions (s3 => glacier), Expiration actions (delete old versions after time)
 - **Notifications:** Actions trigger events (example putObject). Notifications can occur only once if 2 actions happen same time. If you want consistency use versioning.
 - **Athena:** AWS Managed service to perform analyics directly against s3 files. Used for access logs.
-
-## CloudFront
-
-- **Overview:** TODO!
-- **HTTPS in CloudFormation:** HTTPS is avaialble between client and cloudformation and cloudformation and backend.
 
 ## AWS RDS
 
@@ -206,26 +198,6 @@
 - **Dead letter queues:** Messages that can't be processed are sent here for manual intervention.
 - **Fan out pattern:** Combine SNS and SQS to send same message to multiple SQS. Example: s3 bucket object create => sns => multiple sqs.
 
-## SNS
-
-- **PUB / SUB pattern:** As many subscriptions as you want (10_000_000).
-
-## SWF (Simple Workflow Service)
-
-- **Overview:** Build applications that coordinate work across distributed components.
-
-## Glue
-
-- **Overview:** TODO
-
-## Kinesis
-
-**MISSING SECTION, CHECK AGAIN!!!!**
-
-## Amazon MQ
-
-- **Overview:** When migrating to the cloud instead of re-enginnering the application to use SQS and SNS use Amazon MQ.
-
 ## VPC (Virtual Private Cloud)
 
 - **VPC:** Virtual Private Cloud
@@ -238,11 +210,6 @@
 - **VPC Endpoints:** Provide private access to AWS services within VPC
 - **Site to Site VPN:** Connect on-premise VPN to AWS though public network.
 - **Direct Connect (DX):** Establish a physical connection between on-premise and AWS through private network.
-
-## Three Tier Architecture
-
-- Public (ELB), Private (ASG), Data Subnets (RDS).
-- Wordpress example: Public: Multi AZ, Private: AZs and EC2 in them, Data: EFS
 
 ## Docker
 
@@ -356,13 +323,6 @@
 - **Rollbacks (Update):** If fail all is automatically rollback to previous state.
 - **ChangeSet:** Shows all the changes that will happen.
 
-## YAML
-
-- **Key:Value pair**
-- **-:** Indicates array item.
-- **|:** Indicates multi line string.
-- **#:** Indicates comment line.
-
 ## Lambda
 
 - **Serverless:** Developers don't have to manage servers.
@@ -395,10 +355,6 @@
 - **Limits:** Memory allocation (128mb - 3008mb). Maximum execution: 900 seconds. Environment variables: 4kb. Concurrency: 1000. Deployment sized compressed 50mb (250mb uncompressed).
 - **Best Practices:** Perform heavy duty work outside of your handler (database connections, initializations etc.). Use env variables (and encrypt them if secret). Minimize your deployment package by code splitting , layers etc. NEVER have a lambda function call itself recursevily.
 - **Cross Account:** Create execution role for lambda and update lambda code to call AssumeRole Api.
-
-## X-Ray
-
-- **Overview:**
 
 ## API Gateway
 
@@ -481,3 +437,30 @@
 
 - **Overview:** AWS Managed service that uses graphql. It starts with uploading graphql schema. Applications talk directly to AppSync. AppSync graphql schema resolvers to databases, lambdas, https etc.
 - **Security:** API_Key, user pools, openid connect, iam
+
+## X-Ray
+
+- **Overview:** Helps developers analyze and debug production distributed applications using microservice architectures. You can understand how your application works with other services.
+
+## Three Tier Architecture
+
+- Public (ELB), Private (ASG), Data Subnets (RDS).
+- Wordpress example: Public: Multi AZ, Private: AZs and EC2 in them, Data: EFS
+
+## SWF (Simple Workflow Service)
+
+- **Overview:** Build applications that coordinate work across distributed components.
+
+## Glue
+
+- **Overview:** AWS managed Extract Transform Load service to prepare and load data for analytics.
+
+## Kinesis
+
+- **Kinesis Data Stream:** Ingests and stores data streams for processing.
+- **Kinesis Data Firehose:** Prepares and loads data continously to the destinations you choose.
+- **Kinesis Data Analytics:** Query and analyze streaming data.
+
+## Amazon MQ
+
+- **Overview:** When migrating to the cloud instead of re-enginnering the application to use SQS and SNS use Amazon MQ.
