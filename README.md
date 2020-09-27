@@ -1,6 +1,4 @@
-# Study Guide
-
-## IAM
+# IAM
 
 - **IAM:** Identity and Access Management. Global Service.
 - **Policy:** Effect (allow or deny), Action (array of actions to effect), Resource (arn).
@@ -17,11 +15,11 @@
 - **Access Analyzer:** Identify resources in your organization and accounts that are shared with external entity.
 - **Amazon Inspector:** Security and compliance. Vulnerabilies, exposures etc.
 - **Trust Policy:** Define which principals can assume role.
-- **HTTPS:**  You can import certificate into IAM if not supported by ACM.
+- **HTTPS:** You can import certificate into IAM if not supported by ACM.
 
 # EC2
 
-- **EC2 Instance Connect:** Browser based SSH connectin through AWS console.
+- **EC2 Instance Connect:** Browser based SSH connection through AWS console.
 - **Security Groups:** They control traffic that is allowed into (inbound) / out (outbound) for EC2 Machines. Can be attached to multiple instances. Outside of EC2 instance. Time Out => security group missconfigured. Connection refused => application error.
 - **IPv4:** 256\*\*4 options. Example: 250.250.250.250
 - **IPv6:** Example: 1900:4545:3:200:f8ff:fe21:67cf
@@ -52,9 +50,35 @@
 - **EC2 Detailed monitoring:** EC2 sends metric data to cloudwatch every 5min. If you enable detailed monitoring it becomes 1 min.
 - **EC2 High Resolution metrics:** Using PutMetric api you can publish custom metrics at 1 second interval.
 
+# EBS - Elastic Block Storage
 
-## Load Balancers
- 
+- **EBS (Elastic Block Storage):** is a network drive, persistant storage (except root).
+- **Mount:** Can only be mounted by ONE EC2 instance in same AZ. Not mounted by default, have to mount in ec2 instance. Not mounted after restart, need to fstab.
+- **GP2 (SSD):** general purpose price / performance
+- **IOI (SSD):** Highest performance for mission critical low latency or high throughput. Databases.
+- **STI (HDD):** Low cost for frequently accessed data. Warehouse.
+- **SCI (HDD):** Low cost infrequently access data.
+- **Snapshots:** Incremental. Region constrained (have to copy for different region). Snapshot of encrypted is encrypted.
+- **AZ / Region Migration:** Snapshot the volume, copy volume, create volume from snapshot.
+- **Encryption:** Supports in-flight and at-rest encryption.
+- **How to encrypt unencrypted:** Snapshot, copy, create.
+- **Instance Store (ephemeral):** Physically attached to the machine. Lost on stop. Good for cache.
+- **Raid 0:** Split data. Peformance. 2x 500gb with 4000 IOPS => 1x 1000gb with 8000 iops.
+- **Raid 1:** Duplicated data. Fault tolerance. 2x 500gb with 4000 IOPS => 1x 500gb with 4000 iops.
+
+# Auto Scaling Group
+
+- **Target Tracking Scaling:** Most simple and easy to set-up. Example: I want the average ASG CPU to stay at around 40%
+- **Launch configuration:** set ami, min max, load balancers etc.
+- **Simple / Step scaling:** Based on CloudWatch alarm. Can be used with custom metrics.
+- **Scheduled Actions:** Time based. Example: Every friday increase amount of instances.
+- **Scaling cooldown:** ASG doesn't launch or terminate additional instances before previous scaling takes effect.
+- **General:** By default Auto Scaling works only for Ec2 instances. For EB you must change auto scaling group from EC2 to EB.
+- **SSL Pass-through:** SSL layer is not decrypted at load balancer but passed along to server.
+- **SSL Termination:** Reduces strain on server by offloading decryption.
+
+# Load Balancers
+
 - **Scalability** - application can handle greater loads by adapting. Vertical (increase resources), horizontal (increase number of instances).
 - **Availability:** Survive disasters.
 - **Load balancing:** Balances traffic to underlying instances.
@@ -71,41 +95,14 @@
 - **ALB Request tracing:** Track HTTP requests from clients to targets. When load balancer retrieves request it adds or updates header with trace id.
 - **ALB Access logs:** Detailed information about client request. Time, ip address, latencies, paths etc. Optional feature. Stored in s3 bucket.
 
-## Auto Scaling Group
-
-- **Target Tracking Scaling:** Most simple and easy to set-up. Example: I want the average ASG CPU to stay at around 40%
-- **Launch configuration:** set ami, min max, load balancers etc.
-- **Simple / Step scaling:** Based on CloudWatch alarm. Can be used with custom metrics.
-- **Scheduled Actions:** Time based. Example: Every friday increase amount of instances.
-- **Scaling cooldown:** ASG doesn't launch or terminate additional instances before previous scaling takes effect.
-- **General:** By default Auto Scaling works only for Ec2 instances. For EB you must change auto scaling group from EC2 to EB.
-- **SSL Pass-through:** SSL layer is not decrypted at load balancer but passed along to server.
-- **SSL Termination:** Reduces strain on server by offloading decryption.
-
-## EBS - Elastic Block Storage
-
-- **EBS (Elastic Block Storage):** is a network drive, persistant storage (except root).
-- **Mount:** Can only be mounted by ONE EC2 instance in same AZ. Not mounted by default, have to mount in ec2 instance. Not mounted after restart, need to fstab.
-- **GP2 (SSD):** general purpose price / performance
-- **IOI (SSD):** Highest performance for mission critical low latency or high throughput. Databases.
-- **STI (HDD):** Low cost for frequently accessed data. Warehouse.
-- **SCI (HDD):** Low cost infrequently access data.
-- **Snapshots:** Incremental. Region constrained (have to copy for different region). Snapshot of encrypted is encrypted.
-- **AZ / Region Migration:** Snapshot the volume, copy volume, create volume from snapshot.
-- **Encryption:** Supports in-flight and at-rest encryption.
-- **How to encrypt unencrypted:** Snapshot, copy, create.
-- **Instance Store (ephemeral):** Physically attached to the machine. Lost on stop. Good for cache.
-- **Raid 0:** Split data. Peformance. 2x 500gb with 4000 IOPS => 1x 1000gb with 8000 iops.
-- **Raid 1:** Duplicated data. Fault tolerance. 2x 500gb with 4000 IOPS => 1x 500gb with 4000 iops.
-
-## EFS - Elastic File System
+# EFS - Elastic File System
 
 - **EFS:** Managed NFS (Network File System).
 - **Mount:** Can be mounted by MANY EC2 instances across AZ. Not mounted by default, have to mount in ec2 instance. Not mounted after restart, need to fstab.
 - **Use cases:** content management, web serving, data sharing, wordpress
 - **Linux only.**
 
-## S3
+# S3
 
 - **Buckets:** Globally unique name. Store objects (files) in buckets (directories).
 - **Objects:** Files. Max size for single upload 100mb. Multi-part upload.
@@ -132,7 +129,7 @@
 - **Athena:** AWS Managed service to perform analyics directly against s3 files. Used for access logs.
 - **Cross account access:** Resource-Based policies and IAM, Resource based ACLs and IAM, cross account IAM roles
 
-## AWS RDS
+# RDS
 
 - **RDS:** AWS Managed serivce. AWS provides: OS patching, continous backups and restore, scaling, multi AZ setup, read replicas, automated provisioning.
 - **Backups:** Automatically, default 7 days retention period. In same region.
@@ -144,7 +141,7 @@
 - **IAM auth:** Can be used to login into MySQL and PostgreSQL.
 - **Convert to encrypted:** Snapshot => copy snapshot with enable encryptio => restore database from copy of snapshot => migrate applications to new database.
 
-## Amazon Aurora
+# Amazon Aurora
 
 - **Compatibility:** PostgreSQL and MySQL drivers.
 - **Performance:** AWS Cloud optimized, 5x mysql or 3x postgres performance
@@ -153,7 +150,7 @@
 - **Aurora Serverless:** Automated database instantiation and auto-scaling based on actual usage
 - **Global Aurora:** Aurora cross region read replicas: usefull for disaster recovery, simple to put in place
 
-## ElastiCache
+# ElastiCache
 
 - **ElastiCache:** AWS Managed Redis or Memcached (in-memory)
 - **ElastiCache Security:** SSL. Redis Auth.
@@ -164,7 +161,7 @@
 - **Lazy loading:** All the read data is cached, data can become stale in cache.
 - **Write Through:** Adds or update data in the cache when written to a DB.
 
-## Route 53
+# Route 53
 
 - **Route53:** is Managed DNS
 - **A:** hostname to IPv4
@@ -179,7 +176,7 @@
 - **Routing Policy - Geolocation:** Based on user location. If user from UK => select resource closest for UK (we have to specify).
 - **Routing Policy - Multi value:** Improved simple. Has health checks.
 
-# AWS Cloudfront
+# Cloudfront
 
 - **AWS CloudFront:** CDN (Content Delivery Network)
 - **Origins:** S3 Bucket, custom origin (http) ec2, alb, s3 website etc.
@@ -189,7 +186,7 @@
 - **Signed Cookie:** Same as URL, but for all files.
 - **AWS Global Accelerator:** User => AWS Global Acelerator => Edge location => Server through internal network. Otherwise it is passed through external network.
 
-## SQS
+# SQS
 
 - **Max size message:** 1b - 256kb
 - **Producer:** Send message.
@@ -204,7 +201,14 @@
 - **Dead letter queues:** Messages that can't be processed are sent here for manual intervention.
 - **Fan out pattern:** Combine SNS and SQS to send same message to multiple SQS. Example: s3 bucket object create => sns => multiple sqs.
 
-## VPC (Virtual Private Cloud)
+# Kinesis
+
+- **Kinesis Data Stream:** Ingests and stores data streams for processing.
+- **Kinesis data stream (ProvisionedThroughputExceeded):** Increase number of shards.
+- **Kinesis Data Firehose:** Prepares and loads data continously to the destinations you choose.
+- **Kinesis Data Analytics:** Query and analyze streaming data.
+
+# VPC (Virtual Private Cloud)
 
 - **VPC:** Virtual Private Cloud
 - **Subnets:** Tied to an AZ, network partition of the VPC
@@ -217,7 +221,7 @@
 - **Site to Site VPN:** Connect on-premise VPN to AWS though public network.
 - **Direct Connect (DX):** Establish a physical connection between on-premise and AWS through private network.
 
-## Docker
+# Docker
 
 - **ECS Clusters:** Logical grouping of EC2 instances
 - **EKS:** Managed kubernetes by AWS.
@@ -225,7 +229,7 @@
 - **Task Definitions:** Metadata in JSON form on how to run a Docker Container. ENV variables, network information, image name, port binding, memory and cpu.
 - **ECS Service:** Define how many tasks should be run and how they should be run. Can be linked to ELB.
 - **ECR:** Private docker image repository. Access is controlled through IAM.
-- **ECS Container Agent:** TODO, check ecs.config. Proably related to non-fargate.
+- **ECS Container Agent:** Included in ECS optimized AMIs, check ecs.config. Proably related to non-fargate.
 - **Fargate:** AWS Managed EC2 instances. You still create Tasks, Services, Load balancers, Auto scaling etc.
 - **ECS Instance Profile:** ECS Service, ECR Service, Cloudwatch permissions
 - **ECS Task Role:** Allow task to talk to other AWS services (like s3 bucket).
@@ -234,7 +238,7 @@
 - **Cluster Capacity Provider:** Cluster auto scaling.
 - **General:** Terminating container instance while in stopped state does not deregister it.
 
-## Elastic Beanstalk
+# Elastic Beanstalk
 
 - **Deployment modes:** Single Instance, High Availability
 - **All at once (deployment):** stop all, fastest, but has downtime
@@ -254,7 +258,7 @@
 - **Custom domain name:** Done using Route53 alias.
 - **Worker Environment:** Meant for tasks that are long to complete. (Decoupling applications)
 
-## CICD
+# CICD
 
 - **CodeCommit:** Managed & hosted git repository by AWS. Security: IAM, SSH key (created in IAM per user).
 - **Code state change events:** CloudWatch events. Occurs when code is modified and push to repo. Example: check for credentials in source code.
@@ -278,7 +282,7 @@
 - **CodeStart:** Integrated solution that groups all above (codecommit, cicd etc.)
 - **CodeBuild error:** You can run codebuild locally to debug errors.
 
-## Security & Encryption
+# Security & Encryption
 
 - **SSL:** Data is encrypted before sending and encrypted after receving. Protects against MITM attacks.
 - **SSE at rest:** Data encrypted after being received by server. Before sent it is decrypted.
@@ -292,14 +296,14 @@
 - **AWS WAF (Web Application Firewall):** Protect against common web exploits. Deployable on ALP, API Gateway, CloudFront.
 - **CloudHSM:** Hardware Security Module that enables you to easily generate your own encryption keys.
 
-## CloudWatch Metrics
+# CloudWatch Metrics
 
 - **Availability:** For every AWS service.
 - **Metric:** Variable to monitor.
 - **EC2 instance metrics:** Per 5 minute (or 1 minute for additional cost).
 - **Custom Metrics:** PutMetricData API => send custom metrics.
 
-## CloudWatch
+# CloudWatch
 
 - **CloudWatch Dashboards:** Global, graphs from different regions.
 - **Sending Logs:** Logs can be sent using SDK.
@@ -313,7 +317,7 @@
 - **AWS CloudTrail:** History of all events / API calls made within your AWS account.
 - **Config:** Record configuration changes such as security groups, load balance changes etc.
 
-## CloudFormation
+# CloudFormation
 
 - **Infrastructure as code:** Code controls infrastructure.
 - **Upload:** To S3 bucket. Cannot edit existing template. Need to upload new version.
@@ -331,7 +335,7 @@
 - **Rollbacks (Update):** If fail all is automatically rollback to previous state.
 - **ChangeSet:** Shows all the changes that will happen.
 
-## Lambda
+# Lambda
 
 - **Serverless:** Developers don't have to manage servers.
 - **Lambda:** On-demand, short executions, virtual functions. Automated scaling.
@@ -364,7 +368,7 @@
 - **Best Practices:** Perform heavy duty work outside of your handler (database connections, initializations etc.). Use env variables (and encrypt them if secret). Minimize your deployment package by code splitting , layers etc. NEVER have a lambda function call itself recursevily.
 - **Cross Account:** Create execution role for lambda and update lambda code to call AssumeRole Api.
 
-## API Gateway
+# API Gateway
 
 - **Overview:** For exposing lambda functions to the world.
 - **Basic features:** API versioning, different environments, security, request throttling, API keys, Swagger / Open API, transform / validate response and requests, caching, generate SDK and API specifications
@@ -383,15 +387,12 @@
 - **API Keys:** Order: create APIs, generate API keys, create usage plans, associate API stages and API keys with usage plan.
 - **Logging:** Enable at stage level. Logs information about request / response body.
 - **Tracing:** Enable X-Ray tracing for extra information.
-- **What is X-Ray used for?:** TO DO
 - **Metrics:** By stage. CacheHitCount, CacheHitMiss, IntegrationLatency, Latency, 4XX or 5XX errors.
 - **CORS:** Must be enabled for different domain. Generic CORS ....
 - **Authentication:** Using IAM and IAM Policy. Resource policies. Cognito user pools. Lambda authorizer (Token-Based authorizer). TO DO
 - **Lambda Authorizer:** Validates the request by checking sig v4 and checking etc. TO DO
 
-## SAM - Serverless Application Model
-
-## DynamoDB
+# DynamoDB
 
 - **Overview:** AWS Managed NoSQL database. High availability (3 az) and scaling. Auto scaling etc. Made of tables. Each table has primary key.
 - **Primary keys:** Partition key (unique), Partition key + sort key (combination unique).
@@ -419,58 +420,24 @@
 - **Operations:** Table Cleanup: Drop + Recreate Table. Copying: AWS DataPipeline, Backup & Restore or Scan + Write.
 - **Security:** DMS to migrate to different db. Can launch local DyamoDB. Global Tables. Security: VPC, KMS, TLS, IAM.
 
-## Cognito
+# Cognito
 
-- **Overview:**
+- **Overview:** AWS Managed signin, signup, access control.
 - **User Pools:** Sign in functionality for users. Integrated with API gateway and ALB. Serverless database of user for app. Containes hosted zone.
 - **Lambda triggers:** Authentication, signup, token creation, message. this are synchronous.
 - **Identity Pools (federated identity):** Provide AWS credentials to users so they can access AWS resources directly. Integrates with user pools. Uses STS.
 - **Sync:** Synhcronize data from device to cognito. Replaced by AppSync.
 - **Exercise:** Add Cognito to application (with google login). Add Identity pools application.
 
-## SES
+# Other services
 
-- **Send:** Using AWS SDK or SMTP Interface.
-- **Receive:** Integrates with. S3, SNS, Lambda.
-
-## ACM (AWS Certificate Manager)
-
-- **Integrations:** Loads into Load Balancers, CloudFront, APIs on API Gateway.
-- **Overview:** AWS Managed certificate.
-
-## Step Functions
-
-- **Overview:** Serverless visual workflow to orchastrate lambda functions. Represent flow as JSON state machines. Sequence, parallel, error handling etc. Order fulfillment, data processing, web applications. Similar to JOBS.
-
-## AppSync
-
-- **Overview:** AWS Managed service that uses graphql. It starts with uploading graphql schema. Applications talk directly to AppSync. AppSync graphql schema resolvers to databases, lambdas, https etc.
-- **Security:** API_Key, user pools, openid connect, iam
-
-## X-Ray
-
-- **Overview:** Helps developers analyze and debug production distributed applications using microservice architectures. You can understand how your application works with other services.
-
-## Three Tier Architecture
-
-- Public (ELB), Private (ASG), Data Subnets (RDS).
-- Wordpress example: Public: Multi AZ, Private: AZs and EC2 in them, Data: EFS
-
-## SWF (Simple Workflow Service)
-
-- **Overview:** Build applications that coordinate work across distributed components.
-
-## Glue
-
-- **Overview:** AWS managed Extract Transform Load service to prepare and load data for analytics.
-
-## Kinesis
-
-- **Kinesis Data Stream:** Ingests and stores data streams for processing.
-- **Kinesis data stream (ProvisionedThroughputExceeded):** Increase number of shards.
-- **Kinesis Data Firehose:** Prepares and loads data continously to the destinations you choose.
-- **Kinesis Data Analytics:** Query and analyze streaming data.
-
-## Amazon MQ
-
-- **Overview:** When migrating to the cloud instead of re-enginnering the application to use SQS and SNS use Amazon MQ.
+- **SNS:**
+- **SES (Simple Email Service):** Send using SMTP interface or SDK. Integrates with s3, sns, lambda.
+- **ACM (AWS Certificate Manager):** AWS Managed certificates. Can load certificates into Load Balancers, CloudFront, APIs on API Gateway.
+- **Step function:** Serverless visual workflow to orchestrate lambda functions. Represent as JSON state machines.
+- **AppSync:** AWS Managed service that uses graphql. It starts with uploading graphql schema. Applications talk directly to AppSync. AppSync graphql schema resolvers to databases, lambdas, https etc. Security is done with api key, user pools, openid connect, iam.
+- **X-Ray:** Analyze and debug distributed applications (microservices). X-Ray sampling reduces amount of requests which are traced by AWS algorithm.
+- **Glue:** AWS managed Extract Transform Load service to prepare and load data for analytics.
+- **SWF (Simple Workflow Service):** Build applications that coordinate work across distributed components.
+- **Amazon MQ:** When migrating to the cloud instead of re-enginnering the application to use SQS and SNS use Amazon MQ.
+- **Three Tier Architecture (concept):** ELB + ASG + RDS, public + private + data
